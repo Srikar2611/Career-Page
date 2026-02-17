@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Careers - ATS</title>
+    <link rel="stylesheet" href="style.css">  
+</head>
+
+<body>
+
+    <!-- HEADER -->
+    <header>
+        <h2 class="logo">DBL</h2>
+        <button>HOME</button>
+    </header>
+
+    <!-- HERO -->
+  <section class="intro">
+    <h1>Build The Future With Us</h1>
+    <p>
+        We are a technology driven company building intelligent solutions
+        that impact millions of users. Join our team of innovators,
+        problem solvers and builders.
+    </p>
+</section>
+
+<section class="stats">
+    <div class="stat">
+        <h2>500+</h2>
+        <p>Employees</p>
+    </div>
+    <div class="stat">
+        <h2>50+</h2>
+        <p>Open Roles</p>
+    </div>
+    <div class="stat">
+        <h2>4.8★</h2>
+        <p>Linkedin Rating</p>
+    </div>
+</section>
+
+<section class="why">
+    <h1>Why Join DBL?</h1>
+
+    <div class="why-grid">
+        <div class="why-card">
+            🚀 Fast Growth Environment
+        </div>
+        <div class="why-card">
+            💡 Work With Latest Tech
+        </div>
+        <div class="why-card">
+            🌍 Global Opportunities
+        </div>
+    </div>
+</section>
+
+
+    <!-- FILTER -->
+    <section class="filter-section">
+
+    <input type="text" id="searchInput" placeholder="Search by title">
+
+<select id="categoryFilter">
+    <option value="">All Categories</option>
+    <option value="Sales">Sales</option>
+    <option value="Billing">Billing</option>
+    <option value="Finance">Finance</option>
+</select>
+
+    <select id="typeFilter">
+        <option value="">All Job Type</option>
+        <option value="Full Time">Full Time</option>
+    </select>
+
+    <select id="locationFilter">
+        <option value="">All Locations</option>
+        <option value="Bhopal">Bhopal</option>
+        <option value="Across India">Across India</option>
+    </select>
+
+</section>
+
+
+    <!-- JOB GRID -->
+<section class="jobs-section">
+
+    <div class="job-card"
+         data-category="Developer"
+         data-type="Full Time"
+         data-location="Bhopal">
+
+        <h3>Asst. Manager</h3>
+        <p>Department: Developer</p>
+        <p>Job Type: Full Time</p>
+        <p>Location: Bhopal</p>
+        <p>Experience: 5-10 Years</p>
+
+        <a href="job-details.html">
+            <button>More Details</button>
+        </a>
+
+    </div>
+
+    <div class="job-card"
+         data-category="Audit"
+         data-type="Full Time"
+         data-location="Bhopal">
+
+        <h3>DGM / AGM – Audit</h3>
+        <p>Department: Audit</p>
+        <p>Job Type: Full Time</p>
+        <p>Location: Bhopal</p>
+        <p>Experience: 5-8 Years</p>
+
+        <a href="job-details.html">
+            <button>More Details</button>
+        </a>
+
+    </div>
+
+</section>
+
+
+    </section>
+
+    <script>
+const searchInput = document.getElementById("searchInput");
+const categoryFilter = document.getElementById("categoryFilter");
+const typeFilter = document.getElementById("typeFilter");
+const locationFilter = document.getElementById("locationFilter");
+
+const jobCards = document.querySelectorAll(".job-card");
+
+function filterJobs() {
+    const searchValue = searchInput.value.toLowerCase();
+    const categoryValue = categoryFilter.value;
+    const typeValue = typeFilter.value;
+    const locationValue = locationFilter.value;
+
+    jobCards.forEach(card => {
+        const title = card.querySelector("h3").innerText.toLowerCase();
+        const category = card.dataset.category;
+        const type = card.dataset.type;
+        const location = card.dataset.location;
+
+        let show = true;
+
+        if (searchValue && !title.includes(searchValue)) {
+            show = false;
+        }
+
+        if (categoryValue && category !== categoryValue) {
+            show = false;
+        }
+
+        if (typeValue && type !== typeValue) {
+            show = false;
+        }
+
+        if (locationValue && location !== locationValue) {
+            show = false;
+        }
+
+        card.style.display = show ? "" : "none";
+    });
+}
+
+searchInput.addEventListener("input", filterJobs);
+categoryFilter.addEventListener("change", filterJobs);
+typeFilter.addEventListener("change", filterJobs);
+locationFilter.addEventListener("change", filterJobs);
+</script>
+</body>
+</html>
