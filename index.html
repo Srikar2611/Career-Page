@@ -133,5 +133,37 @@ categoryFilter.addEventListener("change", filterJobs);
 typeFilter.addEventListener("change", filterJobs);
 locationFilter.addEventListener("change", filterJobs);
 </script>
+
+<script>
+const SHEET_URL = "https://script.google.com/macros/s/AKfycbzpYL07iVSXmG3Vq6HozcMwxILc5vPSuIuG80c1s68csotZCz1SmIDQJwByATKtOUn1/exec";
+
+fetch(SHEET_URL)
+  .then(res => res.json())
+  .then(data => {
+
+    const container = document.getElementById("jobsContainer");
+
+    data.forEach(job => {
+
+      const card = `
+        <div class="job-card">
+          <h3>${job["Job Title"]}</h3>
+          <p>Department: ${job["Department"]}</p>
+          <p>Job Type: ${job["Employment Type"]}</p>
+          <p>Location: ${job["Job Location"]}</p>
+          <p>Experience: ${job["Total Years of Experience"]} Years</p>
+          <a href="YOUR_GOOGLE_FORM_LINK" target="_blank">
+            <button>Apply Now</button>
+          </a>
+        </div>
+      `;
+
+      container.innerHTML += card;
+    });
+
+  });
+</script>
+
+
 </body>
 </html>
