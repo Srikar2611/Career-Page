@@ -1,4 +1,4 @@
-const sheetURL = "https://docs.google.com/spreadsheets/d/17qPQSZ18pB8ayPIP2yb_jxRLznWno8ypa9gCnBVpjFk/edit?usp=sharing";
+const sheetURL = "https://docs.google.com/spreadsheets/d/e/17qPQSZ18pB8ayPIP2yb_jxRLznWno8ypa9gCnBVpjFk/pub?output=csv";
 const params = new URLSearchParams(window.location.search);
 const jobID = params.get("id");
 
