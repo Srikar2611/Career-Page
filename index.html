@@ -142,32 +142,41 @@ locationFilter.addEventListener("change", filterJobs);
 </script>
 
 <script>
-const SHEET_URL = "https://script.google.com/macros/s/AKfycbzpYL07iVSXmG3Vq6HozcMwxILc5vPSuIuG80c1s68csotZCz1SmIDQJwByATKtOUn1/exec";
+const sheetURL = "https://docs.google.com/spreadsheets/d/17qPQSZ18pB8ayPIP2yb_jxRLznWno8ypa9gCnBVpjFk/edit?usp=sharing";
 
-fetch(SHEET_URL)
-  .then(res => res.json())
-  .then(data => {
+fetch(sheetURL)
+  .then(res => res.text())
+  .then(csv => {
 
+    const rows = csv.split("\n").slice(1);
     const container = document.getElementById("jobsContainer");
 
-    data.forEach(job => {
+    rows.forEach(row => {
+      const cols = row.split(",");
+
+      const jobID = cols[0];
+      const title = cols[1];
+      const dept = cols[2];
+      const exp = cols[3];
+      const skills = cols[6];
+      const shortDesc = cols[7];
+      const status = cols[9];
+
+      if(status !== "Open") return;
 
       const card = `
         <div class="job-card">
-          <h3>${job["Job Title"]}</h3>
-          <p>Department: ${job["Department"]}</p>
-          <p>Job Type: ${job["Employment Type"]}</p>
-          <p>Location: ${job["Job Location"]}</p>
-          <p>Experience: ${job["Total Years of Experience Required"]}</p>
-          <a href="https://forms.gle/eJ5VP8cYjEuQP52s9" target="_blank">
-            <button>Apply Now</button>
-          </a>
+          <h3>${title}</h3>
+          <p><b>Department:</b> ${dept}</p>
+          <p><b>Experience:</b> ${exp}</p>
+          <p><b>Skills:</b> ${skills}</p>
+          <p>${shortDesc}</p>
+          <a class="btn" href="job.html?id=${jobID}">More Details</a>
         </div>
       `;
 
       container.innerHTML += card;
     });
-
   });
 </script>
 
