@@ -1,37 +1,23 @@
-const sheetURL = "https://docs.google.com/spreadsheets/d/e/17qPQSZ18pB8ayPIP2yb_jxRLznWno8ypa9gCnBVpjFk/pub?output=csv";
+const API_URL = "https://script.google.com/macros/s/AKfycbwj29oK28hyl7jqRL5gKyHgjIMZuA9PTiVtetX_80pY8f1SWHtnmCwvBmJp02heD7PcYg/exec";
+
 const params = new URLSearchParams(window.location.search);
 const jobID = params.get("id");
 
-fetch(sheetURL)
-  .then(res => res.text())
-  .then(csv => {
+fetch(API_URL)
+  .then(res => res.json())
+  .then(jobs => {
 
-    const rows = csv.split("\n").slice(1);
+    const job = jobs.find(j => j.JobID == jobID);
 
-    rows.forEach(row => {
-      const cols = row.split(",");
-
-      if(cols[0] !== jobID) return;
-
-      const title = cols[1];
-      const dept = cols[2];
-      const exp = cols[3];
-      const loc = cols[4];
-      const type = cols[5];
-      const skills = cols[6];
-      const fullDesc = cols[8];
-
-      document.getElementById("jobDetails").innerHTML = `
-        <h1>${title}</h1>
-        <p><b>Department:</b> ${dept}</p>
-        <p><b>Experience:</b> ${exp}</p>
-        <p><b>Location:</b> ${loc}</p>
-        <p><b>Job Type:</b> ${type}</p>
-        <p><b>Skills:</b> ${skills}</p>
-        <hr>
-        <p>${fullDesc}</p>
-        <a class="btn" href="PASTE_GOOGLE_FORM_LINK">Apply Now</a>
-      `;
-    });
-
+    document.getElementById("jobDetails").innerHTML = `
+      <h1>${job.Title}</h1>
+      <p><b>Department:</b> ${job.Department}</p>
+      <p><b>Experience:</b> ${job.Experience}</p>
+      <p><b>Location:</b> ${job.Location}</p>
+      <p><b>Job Type:</b> ${job.JobType}</p>
+      <p><b>Skills:</b> ${job.Skills}</p>
+      <hr>
+      <p>${job.FullDescription}</p>
+      <a class="btn" href="PASTE_GOOGLE_FORM_LINK">Apply Now</a>
+    `;
   });
