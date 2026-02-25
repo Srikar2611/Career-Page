@@ -66,25 +66,32 @@ body {
     gap: 25px;
 }
 
-/* JOB CARD */
-.job-card {
-    background: white;
-    padding: 25px;
-    border-radius: 12px;
-    box-shadow: 0 6px 18px rgba(0,0,0,0.1);
-    text-align: left;
+/* Job cards grid */
+#jobsContainer{
+    display:flex;
+    flex-wrap:wrap;
+    gap:20px;
+    padding:30px;
 }
 
-.job-card h3 {
-    margin-top: 0;
+.job-card{
+    background:#fff;
+    border-radius:10px;
+    padding:20px;
+    width:320px;
+    box-shadow:0 4px 12px rgba(0,0,0,0.08);
 }
 
-.btn {
-    display: inline-block;
-    margin-top: 12px;
-    padding: 10px 18px;
-    background: #007bff;
-    color: white;
-    border-radius: 6px;
-    text-decoration: none;
+.job-card h3{
+    margin-top:0;
+}
+
+.btn{
+    display:inline-block;
+    margin-top:10px;
+    padding:8px 16px;
+    background:#007bff;
+    color:#fff;
+    text-decoration:none;
+    border-radius:6px;
 }
