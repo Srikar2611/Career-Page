@@ -18,6 +18,6 @@ fetch(API_URL)
       <p><b>Skills:</b> ${job.Skills}</p>
       <hr>
       <p>${job.FullDescription}</p>
-      <a class="btn" href="PASTE_GOOGLE_FORM_LINK">Apply Now</a>
+      <a class="btn" href="https://forms.gle/zwUweRbLsiTjsJGk9">Apply Now</a>
     `;
   });
