@@ -1,4 +1,4 @@
-const API_URL = "https://script.google.com/macros/s/AKfycbwj29oK28hyl7jqRL5gKyHgjIMZuA9PTiVtetX_80pY8f1SWHtnmCwvBmJp02heD7PcYg/exec";
+const API_URL = "https://script.google.com/macros/s/AKfycbygG1-fWQ9Z68ixv2ijQzFVx2SxuvjjY1xG3u8sfejNxpkD3O8RaEk1USUG1agZbDiQaA/exec";
 
 const params = new URLSearchParams(window.location.search);
 const jobID = params.get("id");
