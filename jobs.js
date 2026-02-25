@@ -1,36 +1,29 @@
-const sheetURL = "https://docs.google.com/spreadsheets/d/17qPQSZ18pB8ayPIP2yb_jxRLznWno8ypa9gCnBVpjFk/edit?resourcekey=&gid=1149977252#gid=1149977252";
+const API_URL = "https://script.google.com/macros/s/AKfycbwj29oK28hyl7jqRL5gKyHgjIMZuA9PTiVtetX_80pY8f1SWHtnmCwvBmJp02heD7PcYg/exec";
 
-fetch(sheetURL)
-  .then(res => res.text())
-  .then(csv => {
+fetch(API_URL)
+  .then(res => res.json())
+  .then(data => {
 
-    const rows = csv.split("\n").slice(1);
+    const jobs = data;   // API returns array now
     const container = document.getElementById("jobsContainer");
 
-    rows.forEach(row => {
-      const cols = row.split(",");
+    container.innerHTML = ""; // clear loading text
 
-      const jobID = cols[0];
-      const title = cols[1];
-      const dept = cols[2];
-      const exp = cols[3];
-      const skills = cols[6];
-      const shortDesc = cols[7];
-      const status = cols[9];
-
-      if(status !== "Open") return;
+    jobs.forEach(job => {
 
       const card = `
         <div class="job-card">
-          <h3>${title}</h3>
-          <p><b>Department:</b> ${dept}</p>
-          <p><b>Experience:</b> ${exp}</p>
-          <p><b>Skills:</b> ${skills}</p>
-          <p>${shortDesc}</p>
-          <a class="btn" href="job.html?id=${jobID}">More Details</a>
+          <h3>${job.Title}</h3>
+          <p><b>Department:</b> ${job.Department}</p>
+          <p><b>Experience:</b> ${job.Experience}</p>
+          <p><b>Skills:</b> ${job.Skills}</p>
+          <p>${job.ShortDesc}</p>
+          <a class="btn" href="job.html?id=${job.JobID}">More Details</a>
         </div>
       `;
 
       container.innerHTML += card;
     });
-  });
+
+  })
+  .catch(err => console.error("API ERROR:", err));
