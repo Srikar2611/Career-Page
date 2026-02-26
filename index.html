@@ -1,82 +1,48 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-    <meta charset="UTF-8">
-    <title>DBL</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <!-- Google Font -->
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
-
-    <!-- Main CSS -->
-    <link rel="stylesheet" href="style.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DBL Careers</title>
+<link rel="stylesheet" href="style.css">
 </head>
-
-    <style>
-body { background:red !important; }
-</style>
 
 <body>
 
-    <!-- NAVBAR -->
-    <header class="nav">
-        <div class="container nav-flex">
-            <h2 class="logo">DBL Careers</h2>
-            <span class="tagline">AI Powered Hiring</span>
-        </div>
-    </header>
+<!-- NAVBAR -->
+<header class="nav">
+  <div class="container nav-inner">
+    <h2>DBL Careers</h2>
+  </div>
+</header>
 
-    <!-- HERO -->
-    <section class="hero">
-        <div class="container hero-content">
-            <h1>Build The Future With Us</h1>
-            <p>We are a technology driven company building intelligent solutions.</p>
-            <a href="#jobs" class="primary-btn">View Open Roles</a>
-        </div>
-    </section>
+<!-- HERO -->
+<section class="hero">
+  <div class="container">
+    <h1>Build The Future With Us</h1>
+    <p>We are a technology driven company building intelligent solutions.</p>
+  </div>
+</section>
 
-    <!-- COMPANY STATS -->
-    <section class="stats">
-        <div class="container stats-grid">
-            <div class="stat-card">
-                <h2>5000+</h2>
-                <p>Employees</p>
-            </div>
+<!-- STATS -->
+<section class="stats">
+  <div class="container stats-inner">
+    <div class="stat"><h2>5000+</h2><p>Employees</p></div>
+    <div class="stat"><h2>50+</h2><p>Open Roles</p></div>
+    <div class="stat"><h2>4.8★</h2><p>Glassdoor</p></div>
+  </div>
+</section>
 
-            <div class="stat-card">
-                <h2>50+</h2>
-                <p>Open Roles</p>
-            </div>
+<!-- JOBS -->
+<section class="jobs">
+  <div class="container">
+    <h1 class="title">Open Positions</h1>
+    <div id="jobsContainer" class="jobs-grid">
+      Loading jobs...
+    </div>
+  </div>
+</section>
 
-            <div class="stat-card">
-                <h2>4.8★</h2>
-                <p>Glassdoor Rating</p>
-            </div>
-        </div>
-    </section>
-
-    <!-- JOBS -->
-    <section id="jobs" class="jobs">
-        <div class="container">
-            <h1 class="section-title">Open Positions</h1>
-
-            <!-- Jobs will be injected by jobs.js -->
-            <div id="jobsContainer" class="jobs-grid">
-                <div class="loading">Loading jobs...</div>
-            </div>
-        </div>
-    </section>
-
-    <!-- FOOTER -->
-    <footer class="footer">
-        <div class="container">
-            <p>© 2026 DBL Technologies — AI Recruitment System</p>
-        </div>
-    </footer>
-
-    <!-- Jobs Script -->
-    <script src="jobs.js"></script>
-
+<script src="jobs.js"></script>
 </body>
 </html>
