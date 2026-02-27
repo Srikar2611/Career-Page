@@ -116,12 +116,15 @@ function renderJobs(jobs) {
 
         card.dataset.category = job["Department"] || "";
         card.dataset.location = job["Location"] || "";
+        card.dataset.location = job["Experince"] || "";
+        card.dataset.location = job["Age"] || "";
 
         card.innerHTML = `
             <h3>${job["Job Title"] || ""}</h3>
             <p>Department: ${job["Department"] || ""}</p>
             <p>Location: ${job["Location"] || ""}</p>
             <p>Experience: ${job["Experience"] || ""}</p>
+            <p>Experience: ${job["Age"] || ""}</p>
             <a href="job-details.html?id=${job["JobID"]}">
                 <button>More Details</button>
             </a>
