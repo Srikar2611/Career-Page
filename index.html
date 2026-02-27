@@ -77,7 +77,26 @@ function filterJobs() {
         return titleMatch && categoryMatch;
     });
 
-    renderJobs(filtered);
+    function renderJobs(jobs) {
+    const container = document.getElementById("jobsContainer");
+    container.innerHTML = "";
+
+    console.log("Jobs received:", jobs);
+
+    jobs.forEach(job => {
+        const card = document.createElement("div");
+        card.className = "job-card";
+
+        // DEBUG: print all fields dynamically
+        let fieldsHTML = "";
+        for (const key in job) {
+            fieldsHTML += `<p><b>${key}</b>: ${job[key]}</p>`;
+        }
+
+        card.innerHTML = fieldsHTML;
+        container.appendChild(card);
+    });
+}
 }
 
 document.getElementById("searchInput").addEventListener("input", filterJobs);
