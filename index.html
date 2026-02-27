@@ -136,8 +136,10 @@ async function loadJobs() {
             <p>Location: ${job.Location}</p>
             <p>Experience: ${job.Experience}</p>
 
-            <a href="job-details.html?job=${encodeURIComponent(JSON.stringify(job))}">
-                <button>More Details</button>
+            <a href="job-details.html?id=${job.JobID}">
+            <button>More Details</button>
+            </a>
+            
             </a>
         `;
 
