@@ -18,49 +18,41 @@
 </section>
 
 <script>
-// ⭐ read job JSON from URL
+const API_URL = "https://docs.google.com/spreadsheets/d/1OJ1F12TRZV-QGsiCKOPXD0nAq1v0ZObDuhNqsRCJK4k/edit?resourcekey=&gid=1322539350#gid=1322539350";
+
 const params = new URLSearchParams(window.location.search);
-const jobData = JSON.parse(decodeURIComponent(params.get("job")));
+const jobId = params.get("id");
 
-const container = document.getElementById("jobDetails");
+async function loadJobDetails() {
+    const res = await fetch(API_URL);
+    const jobs = await res.json();
 
-// build HTML dynamically
-let html = `
-    <h1>${jobData["Job Title"]}</h1>
-    <h3>
-        Location: ${jobData.Location || ""} |
-        Experience: ${jobData.Experience || ""}
-    </h3>
-    <br>
-`;
+    const job = jobs.find(j => j.JobID == jobId);
 
-// ⭐ print ALL dynamic fields from sheet
-for (const key in jobData) {
+    const container = document.getElementById("jobDetails");
 
-    // skip fields already shown above
-    if (["Job Title","Location","Experience","Timestamp","Status"].includes(key))
-        continue;
+    let html = `
+        <h1>${job["Job Title"]}</h1>
+        <h3>Location: ${job.Location} | Experience: ${job.Experience}</h3>
+        <br>
+    `;
 
-    const value = jobData[key];
-    if (!value) continue;
+    for (const key in job) {
+        if (["JobID","Job Title","Location","Experience","Status","Timestamp"].includes(key)) continue;
+        html += `<h2>${key}</h2><p>${job[key]}</p>`;
+    }
 
     html += `
-        <h2>${key}</h2>
-        <p>${value}</p>
+        <br><br>
+        <a href="https://forms.gle/GKWMRFmRonT7o7TD9" target="_blank">
+            <button style="padding:15px 30px; font-size:16px;">Apply Now</button>
+        </a>
     `;
+
+    container.innerHTML = html;
 }
 
-// Apply button stays same
-html += `
-    <br><br>
-    <a href="https://forms.gle/kCbTjDJGcTCs43ee9" target="_blank">
-        <button style="padding:15px 30px; font-size:16px;">
-            Apply Now
-        </button>
-    </a>
-`;
-
-container.innerHTML = html;
+loadJobDetails();
 </script>
 
 </body>
