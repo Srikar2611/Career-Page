@@ -133,7 +133,15 @@ document.addEventListener("DOMContentLoaded", function () {
             return titleMatch && categoryMatch && locationMatch;
         });
 
-        renderJobs(filtered);
+        card.innerHTML = `
+    <h3>${String(job["Job Title"] || "")}</h3>
+    <p>Department: ${String(job["Department"] || "")}</p>
+    <p>Location: ${String(job["Location"] || "")}</p>
+    <p>Experience: ${String(job["Experience"] || "")} Years</p>
+    <a href="job-details.html?id=${job["JobID"]}">
+        <button>More Details</button>
+    </a>
+`;
     }
 
     searchInput.addEventListener("input", filterJobs);
