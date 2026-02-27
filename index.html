@@ -69,9 +69,9 @@
 </section>
 
 <script>
-document.addEventListener("DOMContentLoaded", async function () {
+document.addEventListener("DOMContentLoaded", function () {
 
-const API_URL = "https://script.google.com/macros/s/AKfycbz6F3XcIjOnVHBsQ26RU0p9xrVoTFaz_KDDEVdYtCDEZq4qDt6x8nEO5W2aoljdovGECA/exec";  
+const API_URL = "https://script.google.com/macros/s/AKfycbz6F3XcIjOnVHBsQ26RU0p9xrVoTFaz_KDDEVdYtCDEZq4qDt6x8nEO5W2aoljdovGECA/exec";
 
 const container = document.getElementById("jobsContainer");
 const searchInput = document.getElementById("searchInput");
@@ -81,13 +81,34 @@ const locationFilter = document.getElementById("locationFilter");
 let allJobs = [];
 
 async function loadJobs() {
-    const res = await fetch(API_URL);
-    allJobs = await res.json();
-    renderJobs(allJobs);
+    try {
+        const res = await fetch(API_URL);
+
+        if (!res.ok) {
+            throw new Error("Network response was not ok");
+        }
+
+        const text = await res.text();
+        const data = JSON.parse(text);
+
+        console.log("API DATA:", data);
+
+        allJobs = data;
+        renderJobs(allJobs);
+
+    } catch (err) {
+        console.error("Error loading jobs:", err);
+        container.innerHTML = "<p>Failed to load jobs.</p>";
+    }
 }
 
 function renderJobs(jobs) {
     container.innerHTML = "";
+
+    if (!jobs || jobs.length === 0) {
+        container.innerHTML = "<p>No open jobs available.</p>";
+        return;
+    }
 
     jobs.forEach(job => {
         const card = document.createElement("div");
@@ -97,10 +118,10 @@ function renderJobs(jobs) {
         card.dataset.location = job["Location"] || "";
 
         card.innerHTML = `
-            <h3>${job["Job Title"]}</h3>
-            <p>Department: ${job["Department"]}</p>
-            <p>Location: ${job["Location"]}</p>
-            <p>Experience: ${job["Experience"]}</p>
+            <h3>${job["Job Title"] || ""}</h3>
+            <p>Department: ${job["Department"] || ""}</p>
+            <p>Location: ${job["Location"] || ""}</p>
+            <p>Experience: ${job["Experience"] || ""}</p>
             <a href="job-details.html?id=${job["JobID"]}">
                 <button>More Details</button>
             </a>
@@ -116,7 +137,7 @@ function filterJobs() {
     const locationValue = locationFilter.value;
 
     const filtered = allJobs.filter(job => {
-        const titleMatch = job["Job Title"].toLowerCase().includes(searchValue);
+        const titleMatch = (job["Job Title"] || "").toLowerCase().includes(searchValue);
         const categoryMatch = !categoryValue || job["Department"] === categoryValue;
         const locationMatch = !locationValue || job["Location"] === locationValue;
         return titleMatch && categoryMatch && locationMatch;
