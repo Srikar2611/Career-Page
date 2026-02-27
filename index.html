@@ -1,23 +1,99 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Careers - ATS</title>
+    <link rel="stylesheet" href="style.css">  
+</head>
+
+<body>
+
+<header>
+    <h2 class="logo">DBL</h2>
+    <button>HOME</button>
+</header>
+
+<section class="intro">
+    <h1>Build The Future With Us</h1>
+    <p>
+        We are a technology driven company building intelligent solutions
+        that impact millions of users. Join our team of innovators,
+        problem solvers and builders.
+    </p>
+</section>
+
+<section class="stats">
+    <div class="stat">
+        <h2>5000+</h2>
+        <p>Employees</p>
+    </div>
+    <div class="stat">
+        <h2>50+</h2>
+        <p>Open Roles</p>
+    </div>
+    <div class="stat">
+        <h2>4.8★</h2>
+        <p>Linkedin Rating</p>
+    </div>
+</section>
+
+<section class="why">
+    <h1>Why Join DBL?</h1>
+    <div class="why-grid">
+        <div class="why-card">🚀 Fast Growth Environment</div>
+        <div class="why-card">💡 Work With Latest Tech</div>
+        <div class="why-card">🌍 Global Opportunities</div>
+    </div>
+</section>
+
+<section class="filter-section">
+    <input type="text" id="searchInput" placeholder="Search by title">
+
+    <select id="categoryFilter">
+        <option value="">All Categories</option>
+        <option value="Engineering">Engineering</option>
+        <option value="Finance">Finance</option>
+        <option value="Sales">Sales</option>
+    </select>
+
+    <select id="locationFilter">
+        <option value="">All Locations</option>
+        <option value="Bhopal">Bhopal</option>
+        <option value="Remote">Remote</option>
+        <option value="Across India">Across India</option>
+    </select>
+</section>
+
+<!-- JOBS WILL LOAD HERE -->
+<section class="jobs-section" id="jobsContainer">
+    <p>Loading jobs...</p>
+</section>
+
 <script>
-const API_URL = "https://script.google.com/macros/s/AKfycbz6F3XcIjOnVHBsQ26RU0p9xrVoTFaz_KDDEVdYtCDEZq4qDt6x8nEO5W2aoljdovGECA/exec";
+document.addEventListener("DOMContentLoaded", async function () {
+
+const API_URL = "https://script.google.com/macros/s/AKfycbz6F3XcIjOnVHBsQ26RU0p9xrVoTFaz_KDDEVdYtCDEZq4qDt6x8nEO5W2aoljdovGECA/exec";  
+
+const container = document.getElementById("jobsContainer");
+const searchInput = document.getElementById("searchInput");
+const categoryFilter = document.getElementById("categoryFilter");
+const locationFilter = document.getElementById("locationFilter");
+
+let allJobs = [];
 
 async function loadJobs() {
-    const container = document.getElementById("jobsContainer");
-    container.innerHTML = "Loading jobs...";
-
     const res = await fetch(API_URL);
-    const jobs = await res.json();
+    allJobs = await res.json();
+    renderJobs(allJobs);
+}
 
+function renderJobs(jobs) {
     container.innerHTML = "";
 
     jobs.forEach(job => {
-
         const card = document.createElement("div");
         card.className = "job-card";
 
-        // keep filters working
         card.dataset.category = job["Department"] || "";
-        card.dataset.type = "Full Time";
         card.dataset.location = job["Location"] || "";
 
         card.innerHTML = `
@@ -25,7 +101,6 @@ async function loadJobs() {
             <p>Department: ${job["Department"]}</p>
             <p>Location: ${job["Location"]}</p>
             <p>Experience: ${job["Experience"]}</p>
-
             <a href="job-details.html?id=${job["JobID"]}">
                 <button>More Details</button>
             </a>
@@ -35,5 +110,29 @@ async function loadJobs() {
     });
 }
 
+function filterJobs() {
+    const searchValue = searchInput.value.toLowerCase();
+    const categoryValue = categoryFilter.value;
+    const locationValue = locationFilter.value;
+
+    const filtered = allJobs.filter(job => {
+        const titleMatch = job["Job Title"].toLowerCase().includes(searchValue);
+        const categoryMatch = !categoryValue || job["Department"] === categoryValue;
+        const locationMatch = !locationValue || job["Location"] === locationValue;
+        return titleMatch && categoryMatch && locationMatch;
+    });
+
+    renderJobs(filtered);
+}
+
+searchInput.addEventListener("input", filterJobs);
+categoryFilter.addEventListener("change", filterJobs);
+locationFilter.addEventListener("change", filterJobs);
+
 loadJobs();
+
+});
 </script>
+
+</body>
+</html>
