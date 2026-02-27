@@ -71,93 +71,77 @@
 <script>
 document.addEventListener("DOMContentLoaded", function () {
 
-const API_URL = "https://script.google.com/macros/s/AKfycbwE_cb0dNO4GynvF2DaoFIAbsAT8mvI57jwjq0yjlruLy0O0RN63maUx7pJc_HS_Bl5Pg/exec";
+    const API_URL = "https://script.google.com/macros/s/AKfycbwE_cb0dNO4GynvF2DaoFIAbsAT8mvI57jwjq0yjlruLy0O0RN63maUx7pJc_HS_Bl5Pg/exec";
 
-const container = document.getElementById("jobsContainer");
-const searchInput = document.getElementById("searchInput");
-const categoryFilter = document.getElementById("categoryFilter");
-const locationFilter = document.getElementById("locationFilter");
+    const container = document.getElementById("jobsContainer");
+    const searchInput = document.getElementById("searchInput");
+    const categoryFilter = document.getElementById("categoryFilter");
+    const locationFilter = document.getElementById("locationFilter");
 
-let allJobs = [];
+    let allJobs = [];
 
-async function loadJobs() {
-    try {
-        const res = await fetch(API_URL);
+    async function loadJobs() {
+        try {
+            const res = await fetch(API_URL);
+            const data = await res.json();
+            allJobs = data;
+            renderJobs(allJobs);
+        } catch (err) {
+            console.error("Error loading jobs:", err);
+            container.innerHTML = "<p>Failed to load jobs.</p>";
+        }
+    }
 
-        if (!res.ok) {
-            throw new Error("Network response was not ok");
+    function renderJobs(jobs) {
+        container.innerHTML = "";
+
+        if (!jobs || jobs.length === 0) {
+            container.innerHTML = "<p>No open jobs available.</p>";
+            return;
         }
 
-        const text = await res.text();
-        const data = JSON.parse(text);
+        jobs.forEach(job => {
+            const card = document.createElement("div");
+            card.className = "job-card";
 
-        console.log("API DATA:", data);
+            card.dataset.category = job["Department"] || "";
+            card.dataset.location = job["Location"] || "";
 
-        allJobs = data;
-        renderJobs(allJobs);
+            card.innerHTML = `
+                <h3>${job["Job Title"] || ""}</h3>
+                <p>Department: ${job["Department"] || ""}</p>
+                <p>Location: ${job["Location"] || ""}</p>
+                <p>Experience: ${job["Experience"] || ""}</p>
+                <a href="job-details.html?id=${job["JobID"]}">
+                    <button>More Details</button>
+                </a>
+            `;
 
-    } catch (err) {
-        console.error("Error loading jobs:", err);
-        container.innerHTML = "<p>Failed to load jobs.</p>";
+            container.appendChild(card);
+        });
     }
-}
 
-function renderJobs(jobs) {
-    container.innerHTML = "";
+    function filterJobs() {
+        const searchValue = searchInput.value.toLowerCase();
+        const categoryValue = categoryFilter.value;
+        const locationValue = locationFilter.value;
 
-    if (!jobs || jobs.length === 0) {
-        container.innerHTML = "<p>No open jobs available.</p>";
-        return;
+        const filtered = allJobs.filter(job => {
+            const titleMatch = (job["Job Title"] || "").toLowerCase().includes(searchValue);
+            const categoryMatch = !categoryValue || job["Department"] === categoryValue;
+            const locationMatch = !locationValue || job["Location"] === locationValue;
+            return titleMatch && categoryMatch && locationMatch;
+        });
+
+        renderJobs(filtered);
     }
 
-    jobs.forEach(job => {
-        const card = document.createElement("div");
-        card.className = "job-card";
+    searchInput.addEventListener("input", filterJobs);
+    categoryFilter.addEventListener("change", filterJobs);
+    locationFilter.addEventListener("change", filterJobs);
 
-        card.dataset.category = job["Department"] || "";
-        card.dataset.location = job["Location"] || "";
-        card.dataset.location = job["Experince"] || "";
-        card.dataset.location = job["Age"] || "";
-
-        card.innerHTML = `
-    <h3>${job["Job Title"]}</h3>
-    <p>Department: ${job["Department"]}</p>
-    <p>Location: ${job["Location"]}</p>
-    <p>Experience: ${job["Experience"]}</p>
-     <p>Age: ${job["Age"]}</p>
-    <a href="job-details.html?id=${job["JobID"]}">
-        <button>More Details</button>
-    </a>
-`;
-        `;
-
-        container.appendChild(card);
-    });
-}
-
-function filterJobs() {
-    const searchValue = searchInput.value.toLowerCase();
-    const categoryValue = categoryFilter.value;
-    const locationValue = locationFilter.value;
-
-    const filtered = allJobs.filter(job => {
-        const titleMatch = (job["Job Title"] || "").toLowerCase().includes(searchValue);
-        const categoryMatch = !categoryValue || job["Department"] === categoryValue;
-        const locationMatch = !locationValue || job["Location"] === locationValue;
-        return titleMatch && categoryMatch && locationMatch;
-    });
-
-    renderJobs(filtered);
-}
-
-searchInput.addEventListener("input", filterJobs);
-categoryFilter.addEventListener("change", filterJobs);
-locationFilter.addEventListener("change", filterJobs);
-
-loadJobs();
-
+    loadJobs();
 });
 </script>
-
 </body>
 </html>
