@@ -1,212 +1,256 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Careers - ATS</title>
-    <link rel="stylesheet" href="style.css">  
-</head>
-
-<body>
-
-    <!-- HEADER -->
-    <header>
-        <h2 class="logo">DBL</h2>
-        <button>HOME</button>
-    </header>
-
-    <!-- HERO -->
-  <section class="intro">
-    <h1>Build The Future With Us</h1>
-    <p>
-        We are a technology driven company building intelligent solutions
-        that impact millions of users. Join our team of innovators,
-        problem solvers and builders.
-    </p>
-</section>
-
-<section class="stats">
-    <div class="stat">
-        <h2>5000+</h2>
-        <p>Employees</p>
-    </div>
-    <div class="stat">
-        <h2>50+</h2>
-        <p>Open Roles</p>
-    </div>
-    <div class="stat">
-        <h2>4.8★</h2>
-        <p>Linkedin Rating</p>
-    </div>
-</section>
-
-<section class="why">
-    <h1>Why Join DBL?</h1>
-
-    <div class="why-grid">
-        <div class="why-card">
-            🚀 Fast Growth Environment
-        </div>
-        <div class="why-card">
-            💡 Work With Latest Tech
-        </div>
-        <div class="why-card">
-            🌍 Global Opportunities
-        </div>
-    </div>
-</section>
-
-
-    <!-- FILTER -->
-    <section class="filter-section">
-
-    <input type="text" id="searchInput" placeholder="Search by title">
-
-<select id="categoryFilter">
-    <option value="">All Categories</option>
-    <option value="Sales">Sales</option>
-    <option value="Billing">Billing</option>
-    <option value="Finance">Finance</option>
-</select>
-
-    <select id="typeFilter">
-        <option value="">All Job Type</option>
-        <option value="Full Time">Full Time</option>
-    </select>
-
-    <select id="locationFilter">
-        <option value="">All Locations</option>
-        <option value="Bhopal">Bhopal</option>
-        <option value="Across India">Across India</option>
-    </select>
-
-</section>
-
-
-    <!-- JOB GRID -->
-<section class="jobs-section">
-
-    <div class="job-card"
-         data-category="Developer"
-         data-type="Full Time"
-         data-location="Bhopal">
-
-        <h3>Asst. Manager</h3>
-        <p>Department: Developer</p>
-        <p>Job Type: Full Time</p>
-        <p>Location: Bhopal</p>
-        <p>Experience: 5-10 Years</p>
-
-        <a href="job-details.html">
-            <button>More Details</button>
-        </a>
-
-    </div>
-
-    <div class="job-card"
-         data-category="Audit"
-         data-type="Full Time"
-         data-location="Bhopal">
-
-        <h3>DGM / AGM – Audit</h3>
-        <p>Department: Audit</p>
-        <p>Job Type: Full Time</p>
-        <p>Location: Bhopal</p>
-        <p>Experience: 5-8 Years</p>
-
-        <a href="job-details.html">
-            <button>More Details</button>
-        </a>
-
-    </div>
-
-</section>
-
-
-    </section>
-
-    <script>
-const searchInput = document.getElementById("searchInput");
-const categoryFilter = document.getElementById("categoryFilter");
-const typeFilter = document.getElementById("typeFilter");
-const locationFilter = document.getElementById("locationFilter");
-
-const jobCards = document.querySelectorAll(".job-card");
-
-function filterJobs() {
-    const searchValue = searchInput.value.toLowerCase();
-    const categoryValue = categoryFilter.value;
-    const typeValue = typeFilter.value;
-    const locationValue = locationFilter.value;
-
-<script>
-const API_URL = "https://script.google.com/macros/s/AKfycbwH0KTv3tRHX2ldCci9jvk7yEXz--QcXLrMRSOPvwUPyDZjzjsYyyU8GOaiocXSqDCEHg/exec";
-
-async function loadJobs() {
-    const res = await fetch(API_URL);
-    const jobs = await res.json();
-
-    const container = document.getElementById("jobsContainer");
-    container.innerHTML = "";
-
-    jobs.forEach(job => {
-
-        const card = document.createElement("div");
-        card.className = "job-card";
-
-        // These power your existing filters 👇
-        card.dataset.category = job.Department || "";
-        card.dataset.type = job["Job Type"] || "Full Time";
-        card.dataset.location = job.Location || "";
-
-        card.innerHTML = `
-            <h3>${job["Job Title"]}</h3>
-            <p>Department: ${job.Department || ""}</p>
-            <p>Location: ${job.Location || ""}</p>
-            <p>Experience: ${job.Experience || ""}</p>
-
-            <a href="job-details.html?job=${encodeURIComponent(JSON.stringify(job))}">
-                <button>More Details</button>
-            </a>
-        `;
-
-        container.appendChild(card);
-    });
+/* ===== GLOBAL BACKGROUND GLOW ===== */
+body {
+    font-family: 'Segoe UI', sans-serif;
+    margin: 0;
+    background: radial-gradient(circle at top, #1e293b, #020617 70%);
+    color: #e5e7eb;
+    overflow-x: hidden;
 }
 
-loadJobs();
-</script>
-
-    jobCards.forEach(card => {
-        const title = card.querySelector("h3").innerText.toLowerCase();
-        const category = card.dataset.category;
-        const type = card.dataset.type;
-        const location = card.dataset.location;
-
-        let show = true;
-
-        if (searchValue && !title.includes(searchValue)) {
-            show = false;
-        }
-
-        if (categoryValue && category !== categoryValue) {
-            show = false;
-        }
-
-        if (typeValue && type !== typeValue) {
-            show = false;
-        }
-
-        if (locationValue && location !== locationValue) {
-            show = false;
-        }
-
-        card.style.display = show ? "" : "none";
-    });
+/* ===== FLOATING NAVBAR ===== */
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 80px;
+    background: rgba(2,6,23,0.6);
+    backdrop-filter: blur(14px);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
 }
 
-searchInput.addEventListener("input", filterJobs);
-categoryFilter.addEventListener("change", filterJobs);
-typeFilter.addEventListener("change", filterJobs);
-locationFilter.addEventListener("change", filterJobs);
-</script>
-</body>
-</html>
+.logo {
+    font-size: 26px;
+    font-weight: bold;
+    color: #38bdf8;
+    letter-spacing: 4px;
+    text-shadow: 0 0 15px rgba(56,189,248,0.9);
+    
+    display: inline-block;
+    animation: rotate3D 8s linear infinite;
+    transform-style: preserve-3d;
+}
+
+/* 3D Rotation Animation */
+@keyframes rotate3D {
+    0%   { transform: rotateY(0deg); }
+    100% { transform: rotateY(360deg); }
+}
+
+.logo:hover {
+    animation-duration: 2s;
+    text-shadow: 0 0 25px rgba(56,189,248,1);
+}
+
+
+/* ===== HERO WITH GLOW ===== */
+.hero {
+    height: 360px;
+    background: linear-gradient(rgba(2,6,23,0.6), rgba(2,6,23,0.95)), url("hero.jpg");
+    background-size: cover;
+    background-position: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.hero-overlay {
+    font-size: 48px;
+    font-weight: bold;
+    text-shadow: 0 0 25px rgba(56,189,248,0.9);
+    animation: fadeUp 1.2s ease;
+}
+
+/* ===== GLASS FILTER PANEL ===== */
+.filter-section {
+    margin: -50px auto 50px auto;
+    padding: 30px;
+    width: 85%;
+    display: flex;
+    gap: 25px;
+    justify-content: center;
+    backdrop-filter: blur(18px);
+    background: rgba(255,255,255,0.06);
+    border-radius: 18px;
+    box-shadow: 0 0 40px rgba(0,0,0,0.5);
+    animation: fadeUp 1.3s ease;
+}
+
+.filter-section input,
+.filter-section select {
+    padding: 14px;
+    width: 230px;
+    border-radius: 10px;
+    border: none;
+    background: #020617;
+    color: white;
+}
+
+/* ===== JOB GRID ===== */
+.jobs-section {
+    padding: 50px 90px;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    gap: 40px;
+}
+
+/* ===== JOB CARD GLASS + NEON ===== */
+.job-card {
+    background: rgba(2,6,23,0.6);
+    padding: 28px;
+    border-radius: 20px;
+    border: 1px solid #1e293b;
+    backdrop-filter: blur(14px);
+    transition: 0.4s;
+    animation: fadeUp 1.5s ease;
+}
+
+.job-card:hover {
+    transform: translateY(-10px) scale(1.02);
+    border: 1px solid #38bdf8;
+    box-shadow: 0 0 40px rgba(56,189,248,0.4);
+}
+
+.job-card h3 {
+    color: #38bdf8;
+}
+
+/* ===== GRADIENT BUTTON ===== */
+button {
+    margin-top: 20px;
+    padding: 14px 26px;
+    background: linear-gradient(90deg, #06b6d4, #3b82f6, #8b5cf6);
+    background-size: 200%;
+    border: none;
+    border-radius: 10px;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.4s;
+}
+
+button:hover {
+    background-position: right;
+    transform: scale(1.07);
+    box-shadow: 0 0 30px rgba(56,189,248,0.7);
+}
+
+/* ===== APPLY PAGE ===== */
+.apply-section {
+    padding: 90px;
+    text-align: center;
+    animation: fadeUp 1s ease;
+}
+
+.apply-section input {
+    padding: 14px;
+    width: 360px;
+    border-radius: 10px;
+    border: none;
+    background: #020617;
+    color: white;
+}
+
+/* ===== ANIMATION ===== */
+@keyframes fadeUp {
+    from { opacity: 0; transform: translateY(40px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* ===== MOBILE ===== */
+@media (max-width: 900px) {
+    header { padding: 20px; }
+    .filter-section { flex-direction: column; width: 90%; }
+    .jobs-section { padding: 40px; }
+}
+
+/* ===== INTRO SECTION ===== */
+.intro {
+    text-align: center;
+    padding: 80px 20px 40px 20px;
+    max-width: 900px;
+    margin: auto;
+}
+
+.intro h1 {
+    font-size: 44px;
+    color: #38bdf8;
+    text-shadow: 0 0 15px rgba(56,189,248,0.8);
+}
+
+.intro p {
+    font-size: 18px;
+    color: #cbd5e1;
+    margin-top: 15px;
+    line-height: 1.6;
+}
+
+/* ===== STATS SECTION ===== */
+.stats {
+    display: flex;
+    justify-content: center;
+    gap: 80px;
+    padding: 50px 20px;
+    text-align: center;
+}
+
+.stat {
+    background: rgba(255,255,255,0.05);
+    padding: 25px 35px;
+    border-radius: 18px;
+    backdrop-filter: blur(12px);
+    border: 1px solid #1e293b;
+    transition: 0.3s;
+}
+
+.stat:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 0 25px rgba(56,189,248,0.4);
+}
+
+.stat h2 {
+    font-size: 42px;
+    color: #38bdf8;
+    margin: 0;
+}
+
+.stat p {
+    color: #94a3b8;
+}
+
+/* ===== WHY JOIN SECTION ===== */
+.why {
+    text-align: center;
+    padding: 70px 20px;
+}
+
+.why h1 {
+    font-size: 36px;
+    color: #38bdf8;
+    text-shadow: 0 0 15px rgba(56,189,248,0.7);
+}
+
+.why-grid {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    margin-top: 40px;
+}
+
+.why-card {
+    background: rgba(255,255,255,0.05);
+    padding: 30px 45px;
+    border-radius: 18px;
+    backdrop-filter: blur(12px);
+    border: 1px solid #1e293b;
+    font-size: 18px;
+    transition: 0.3s;
+}
+
+.why-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 0 30px rgba(56,189,248,0.4);
+}
+
+
