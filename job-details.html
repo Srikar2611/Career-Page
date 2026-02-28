@@ -11,54 +11,57 @@
     <h2 class="logo">DBL</h2>
 </header>
 
-<section class="apply-section">
-
-    <h1>Asst. Manager – Developer</h1>
-    <h3>Location: Bhopal | Experience: 5-12 Years | Full Time</h3>
-
-    <br>
-
-    <h2>Job Description</h2>
-    <p>
-        We are looking for an experienced Developer youll be center of how our teams work, sell and scale. You'll own and evolve a high-impact Salesforce enviornment, building smart automations and clean data structures to build business faster, better and more connected. <lightning-tab 
-          end-icon-alternative-text="checkmark"
-          end-icon-name="utility:check"
-          icon-assistive-text="down arrow"
-          icon-name="utility:down"
-          label="Item One"
-          title="title"
-          value="tabValue"
-        >
-          <!-- tab content -->
-          
-        </lightning-tab>
-    </p>
-
-    <h2>Responsibilities</h2>
-    <ul style="text-align:left; max-width:600px; margin:auto;">
-        <li>Develop and execute sales strategies</li>
-        <li>Manage regional sales teams</li>
-        <li>Build strong client relationships</li>
-        <li>Meet monthly and quarterly targets</li>
-    </ul>
-
-    <h2>Required Skills</h2>
-    <ul style="text-align:left; max-width:600px; margin:auto;">
-        <li>Sales & Negotiation</li>
-        <li>Leadership & Communication</li>
-        <li>CRM tools knowledge</li>
-        <li>Strategic planning</li>
-    </ul>
-
-    <br><br>
-
-    <a href="https://forms.gle/GKWMRFmRonT7o7TD9" target="_blank">
-        <button style="padding:15px 30px; font-size:16px;">
-            Apply Now
-        </button>
-    </a>
-
+<section class="apply-section" id="jobDetails">
+    <p>Loading job details...</p>
 </section>
+
+<script>
+document.addEventListener("DOMContentLoaded", async function () {
+
+const API_URL = "PASTE_YOUR_EXEC_URL_HERE";
+
+// get JobID from URL
+const params = new URLSearchParams(window.location.search);
+const jobId = params.get("id");
+
+const container = document.getElementById("jobDetails");
+
+try {
+    const res = await fetch(API_URL);
+    const jobs = await res.json();
+
+    const job = jobs.find(j => j.JobID == jobId);
+
+    if (!job) {
+        container.innerHTML = "<p>Job not found.</p>";
+        return;
+    }
+
+    // ⭐ Build dynamic HTML
+    let html = `<h1>${job["Job Title"]}</h1>`;
+
+    for (const key in job) {
+        if (["JobID","Job Title","Status","Timestamp"].includes(key)) continue;
+        html += `<p><b>${key}:</b> ${job[key]}</p>`;
+    }
+
+    html += `
+        <br><br>
+        <a href="https://forms.gle/GKWMRFmRonT7o7TD9" target="_blank">
+            <button style="padding:15px 30px; font-size:16px;">
+                Apply Now
+            </button>
+        </a>
+    `;
+
+    container.innerHTML = html;
+
+} catch (err) {
+    container.innerHTML = "<p>Failed to load job details.</p>";
+}
+
+});
+</script>
 
 </body>
 </html>
