@@ -22,35 +22,68 @@ const API_URL = "https://script.google.com/macros/s/AKfycbw1A7NpzEfnjBBnbxyEhKSx
 
 const params = new URLSearchParams(window.location.search);
 const jobId = params.get("id");
-
 const container = document.getElementById("jobDetails");
 
 try {
     const res = await fetch(API_URL);
     const jobs = await res.json();
 
-    console.log("All jobs:", jobs);
-    console.log("Requested JobID:", jobId);
-
     const job = jobs.find(j => String(j.JobID) === String(jobId));
 
     if (!job) {
-        container.innerHTML = "<h2>Job not found or closed.</h2>";
+        container.innerHTML = "<h2>Job not found.</h2>";
         return;
     }
 
-    let html = `<h1>${job["Job Title"]}</h1><br>`;
+    let html = `
+        <h1>${job["Job Title"]}</h1>
+        <h3>
+            Location: ${job["Location"]} |
+            Experience: ${job["Experience"]} Years |
+            Department: ${job["Department"]}
+        </h3>
+        <br>
+    `;
 
-    // show ALL fields dynamically
+    // ⭐ Special formatted sections
+    if (job["Job Description"]) {
+        html += `
+            <h2>Job Description</h2>
+            <p>${job["Job Description"]}</p>
+        `;
+    }
+
+    if (job["Responsibilities"]) {
+        html += `
+            <h2>Responsibilities</h2>
+            <p>${job["Responsibilities"]}</p>
+        `;
+    }
+
+    if (job["Required Skills"]) {
+        html += `
+            <h2>Required Skills</h2>
+            <p>${job["Required Skills"]}</p>
+        `;
+    }
+
+    // ⭐ Show any future dynamic fields automatically
     for (const key in job) {
-        if (["JobID","Status","Timestamp"].includes(key)) continue;
+        if ([
+            "JobID","Timestamp","Status",
+            "Job Title","Department","Experience","Age","Location",
+            "Job Description","Responsibilities","Required Skills"
+        ].includes(key)) continue;
+
         html += `<p><b>${key}:</b> ${job[key]}</p>`;
     }
 
     html += `
         <br><br>
         <a href="https://forms.gle/GKWMRFmRonT7o7TD9" target="_blank">
-            <button style="padding:15px 30px; font-size:16px;">Apply Now</button>
+            <button style="padding:15px 30px; font-size:16px;">
+                Apply Now
+            </button>
         </a>
     `;
 
