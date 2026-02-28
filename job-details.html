@@ -18,9 +18,8 @@
 <script>
 document.addEventListener("DOMContentLoaded", async function () {
 
-const API_URL = "PASTE_YOUR_EXEC_URL_HERE";
+const API_URL = "https://script.google.com/macros/s/AKfycbw1A7NpzEfnjBBnbxyEhKSx_SoJTVtd4LoUcrob8mBN_ZDDzPHUeiTaCL6pmNHI-rqKig/exec";
 
-// get JobID from URL
 const params = new URLSearchParams(window.location.search);
 const jobId = params.get("id");
 
@@ -30,33 +29,35 @@ try {
     const res = await fetch(API_URL);
     const jobs = await res.json();
 
-    const job = jobs.find(j => j.JobID == jobId);
+    console.log("All jobs:", jobs);
+    console.log("Requested JobID:", jobId);
+
+    const job = jobs.find(j => String(j.JobID) === String(jobId));
 
     if (!job) {
-        container.innerHTML = "<p>Job not found.</p>";
+        container.innerHTML = "<h2>Job not found or closed.</h2>";
         return;
     }
 
-    // ⭐ Build dynamic HTML
-    let html = `<h1>${job["Job Title"]}</h1>`;
+    let html = `<h1>${job["Job Title"]}</h1><br>`;
 
+    // show ALL fields dynamically
     for (const key in job) {
-        if (["JobID","Job Title","Status","Timestamp"].includes(key)) continue;
+        if (["JobID","Status","Timestamp"].includes(key)) continue;
         html += `<p><b>${key}:</b> ${job[key]}</p>`;
     }
 
     html += `
         <br><br>
         <a href="https://forms.gle/GKWMRFmRonT7o7TD9" target="_blank">
-            <button style="padding:15px 30px; font-size:16px;">
-                Apply Now
-            </button>
+            <button style="padding:15px 30px; font-size:16px;">Apply Now</button>
         </a>
     `;
 
     container.innerHTML = html;
 
 } catch (err) {
+    console.error(err);
     container.innerHTML = "<p>Failed to load job details.</p>";
 }
 
