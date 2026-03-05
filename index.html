@@ -128,16 +128,24 @@ document.addEventListener("DOMContentLoaded", function () {
 }
 
     function filterJobs() {
-        const searchValue = searchInput.value.toLowerCase();
-        const categoryValue = categoryFilter.value;
-        const locationValue = locationFilter.value;
+    const searchValue = searchInput.value.toLowerCase();
+    const categoryValue = categoryFilter.value;
+    const locationValue = locationFilter.value;
 
-        const filtered = allJobs.filter(job => {
-            const titleMatch = (job["Job Title"] || "").toLowerCase().includes(searchValue);
-            const categoryMatch = !categoryValue || job["Department"] === categoryValue;
-            const locationMatch = !locationValue || job["Location"] === locationValue;
-            return titleMatch && categoryMatch && locationMatch;
-        });
+    const filtered = allJobs.filter(job => {
+        const title = (job["Job Title"] || "").toLowerCase();
+        const department = job["Department"] || "";
+        const location = job["Location"] || "";
+
+        const titleMatch = title.includes(searchValue);
+        const categoryMatch = !categoryValue || department === categoryValue;
+        const locationMatch = !locationValue || location === locationValue;
+
+        return titleMatch && categoryMatch && locationMatch;
+    });
+
+    renderJobs(filtered);
+}
 
         card.innerHTML = `
     <h3>${String(job["Job Title"] || "")}</h3>
