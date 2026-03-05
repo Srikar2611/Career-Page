@@ -71,28 +71,41 @@
 <script>
 document.addEventListener("DOMContentLoaded", function () {
 
-    const API_URL = "https://script.google.com/macros/s/AKfycbw1A7NpzEfnjBBnbxyEhKSx_SoJTVtd4LoUcrob8mBN_ZDDzPHUeiTaCL6pmNHI-rqKig/exec";
+const API_URL = "https://script.google.com/macros/s/AKfycbw1A7NpzEfnjBBnbxyEhKSx_SoJTVtd4LoUcrob8mBN_ZDDzPHUeiTaCL6pmNHI-rqKig/exec";
 
-    const container = document.getElementById("jobsContainer");
-    const searchInput = document.getElementById("searchInput");
-    const categoryFilter = document.getElementById("categoryFilter");
-    const locationFilter = document.getElementById("locationFilter");
+const container = document.getElementById("jobsContainer");
+const searchInput = document.getElementById("searchInput");
+const categoryFilter = document.getElementById("categoryFilter");
+const locationFilter = document.getElementById("locationFilter");
 
-    let allJobs = [];
+let allJobs = [];
 
-    async function loadJobs() {
-        try {
-            const res = await fetch(API_URL);
-            const data = await res.json();
-            allJobs = data;
-            renderJobs(allJobs);
-        } catch (err) {
-            console.error("Error loading jobs:", err);
-            container.innerHTML = "<p>Failed to load jobs.</p>";
-        }
+// LOAD JOBS
+async function loadJobs() {
+
+    try {
+
+        const res = await fetch(API_URL);
+        const data = await res.json();
+
+        console.log("Jobs received:", data);
+
+        allJobs = data || [];
+
+        renderJobs(allJobs);
+
+    } catch (error) {
+
+        console.error("Error loading jobs:", error);
+        container.innerHTML = "<p>Failed to load jobs.</p>";
+
     }
 
-    function renderJobs(jobs) {
+}
+
+// RENDER JOB CARDS
+function renderJobs(jobs) {
+
     container.innerHTML = "";
 
     if (!jobs || jobs.length === 0) {
@@ -101,38 +114,36 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     jobs.forEach(job => {
+
         const card = document.createElement("div");
         card.className = "job-card";
 
-        card.dataset.category = job["Department"] || "";
-        card.dataset.location = job["Location"] || "";
-
-        
-        let fieldsHTML = "";
-
-        for (const key in job) {
-            if (["JobID","Status","Timestamp"].includes(key)) continue;
-            fieldsHTML += `<p><b>${key}:</b> ${job[key]}</p>`;
-        }
-
         card.innerHTML = `
-            <h3>${job["Job Title"]}</h3>
-            ${fieldsHTML}
+            <h3>${job["Job Title"] || ""}</h3>
+            <p><b>Department:</b> ${job["Department"] || ""}</p>
+            <p><b>Location:</b> ${job["Location"] || ""}</p>
+            <p><b>Experience:</b> ${job["Experience"] || ""} Years</p>
+
             <a href="job-details.html?id=${job["JobID"]}">
                 <button>More Details</button>
             </a>
         `;
 
         container.appendChild(card);
+
     });
+
 }
 
-    function filterJobs() {
+// FILTER JOBS
+function filterJobs() {
+
     const searchValue = searchInput.value.toLowerCase();
     const categoryValue = categoryFilter.value;
     const locationValue = locationFilter.value;
 
     const filtered = allJobs.filter(job => {
+
         const title = (job["Job Title"] || "").toLowerCase();
         const department = job["Department"] || "";
         const location = job["Location"] || "";
@@ -142,27 +153,21 @@ document.addEventListener("DOMContentLoaded", function () {
         const locationMatch = !locationValue || location === locationValue;
 
         return titleMatch && categoryMatch && locationMatch;
+
     });
 
     renderJobs(filtered);
+
 }
 
-        card.innerHTML = `
-    <h3>${String(job["Job Title"] || "")}</h3>
-    <p>Department: ${String(job["Department"] || "")}</p>
-    <p>Location: ${String(job["Location"] || "")}</p>
-    <p>Experience: ${String(job["Experience"] || "")} Years</p>
-    <a href="job-details.html?id=${job["JobID"]}">
-        <button>More Details</button>
-    </a>
-`;
-    }
+// FILTER EVENTS
+searchInput.addEventListener("input", filterJobs);
+categoryFilter.addEventListener("change", filterJobs);
+locationFilter.addEventListener("change", filterJobs);
 
-    searchInput.addEventListener("input", filterJobs);
-    categoryFilter.addEventListener("change", filterJobs);
-    locationFilter.addEventListener("change", filterJobs);
+// START
+loadJobs();
 
-    loadJobs();
 });
 </script>
 </body>
