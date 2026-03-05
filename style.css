@@ -26,7 +26,19 @@ header {
     color: #38bdf8;
     letter-spacing: 4px;
     text-shadow: 0 0 15px rgba(56,189,248,0.9);
-    display: inline-block;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 120px;
+    height: 60px;
+
+    background-image: url("4652_profilepicture.png");
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+
     animation: rotate3D 8s linear infinite;
     transform-style: preserve-3d;
 }
