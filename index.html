@@ -27,8 +27,8 @@
         <p>Employees</p>
     </div>
     <div class="stat">
-        <h2>50+</h2>
-        <p>Open Roles</p>
+    <h2 id="openRolesCount">0</h2>
+    <p>Open Roles</p>
     </div>
     <div class="stat">
         <h2>4.8★</h2>
@@ -53,17 +53,22 @@
         <option value="Engineering">Engineering</option>
         <option value="Finance">Finance</option>
         <option value="Sales">Sales</option>
+        <option value="Billing">Billing</option>
+        <option value="Legal">Legal</option>
+        <option value="Planning">Planning</option>
+        <option value="Sales & Marketing">Sales & Marketing</option>
+        <option value="Telecom">Telecom</option>
     </select>
 
     <select id="locationFilter">
         <option value="">All Locations</option>
-        <option value="Bhopal">Bhopal</option>
+        <option value="Indoor">Indoor</option>
         <option value="Remote">Remote</option>
-        <option value="Across India">Across India</option>
+        <option value="Hyderabad">Hyderabad</option>
     </select>
 </section>
 
-<!-- JOBS WILL LOAD HERE -->
+
 <section class="jobs-section" id="jobsContainer">
     <p>Loading jobs...</p>
 </section>
@@ -76,11 +81,11 @@ const API_URL = "https://script.google.com/macros/s/AKfycbw1A7NpzEfnjBBnbxyEhKSx
 const container = document.getElementById("jobsContainer");
 const searchInput = document.getElementById("searchInput");
 const categoryFilter = document.getElementById("categoryFilter");
-const locationFilter = document.getElementById("locationFilter");
+const openRolesCount = document.getElementById("openRolesCount");
 
 let allJobs = [];
 
-// LOAD JOBS
+
 async function loadJobs() {
 
     try {
@@ -91,7 +96,7 @@ async function loadJobs() {
         console.log("Jobs received:", data);
 
         allJobs = data || [];
-
+        openRolesCount.textContent = allJobs.length;
         renderJobs(allJobs);
 
     } catch (error) {
@@ -103,7 +108,7 @@ async function loadJobs() {
 
 }
 
-// RENDER JOB CARDS
+
 function renderJobs(jobs) {
 
     container.innerHTML = "";
@@ -135,7 +140,7 @@ function renderJobs(jobs) {
 
 }
 
-// FILTER JOBS
+
 function filterJobs() {
 
     const searchValue = searchInput.value.toLowerCase();
@@ -160,12 +165,12 @@ function filterJobs() {
 
 }
 
-// FILTER EVENTS
+
 searchInput.addEventListener("input", filterJobs);
 categoryFilter.addEventListener("change", filterJobs);
 locationFilter.addEventListener("change", filterJobs);
 
-// START
+
 loadJobs();
 
 });
