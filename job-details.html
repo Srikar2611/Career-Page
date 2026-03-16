@@ -9,6 +9,7 @@
 
 <header>
     <h2 class="logo">DBL</h2>
+    <button onclick="window.location.href='https://srikar2611.github.io/Career-Page/'">HOME</button>
 </header>
 
 <section class="apply-section" id="jobDetails">
@@ -45,7 +46,7 @@ try {
         <br>
     `;
 
-    // ⭐ Special formatted sections
+    
     if (job["Job Description"]) {
         html += `
             <h2>Job Description</h2>
@@ -67,7 +68,7 @@ try {
         `;
     }
 
-    // ⭐ Show any future dynamic fields automatically
+    
     for (const key in job) {
         if ([
             "JobID","Timestamp","Status",
