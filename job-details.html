@@ -9,7 +9,9 @@
 
 <header>
     <h2 class="logo">DBL</h2>
-    <button onclick="window.location.href='https://srikar2611.github.io/Career-Page/'">HOME</button>
+    <button onclick="window.location.href='https://srikar2611.github.io/Career-Page/'">
+        HOME
+    </button>
 </header>
 
 <section class="apply-section" id="jobDetails">
@@ -19,83 +21,93 @@
 <script>
 document.addEventListener("DOMContentLoaded", async function () {
 
-const API_URL = "https://script.google.com/macros/s/AKfycbzMMbdcYAliS9v0UerCRd6IU5BIfuPwpP8wwZPYvmso5jh-0rz8301u0tgETXaXXdxK/exec";
+const API_URL = "https://script.google.com/macros/s/AKfycbzMMbdcYAliS9v0UerCRd6IU5BIfuPwpP8wwZPYvmso5jh-0rz8301u0tgETXaXXdxK/exec"; // 🔥 paste your Apps Script URL here
 
 const params = new URLSearchParams(window.location.search);
 const jobId = params.get("id");
+
 const container = document.getElementById("jobDetails");
 
 try {
+
+    if (!jobId) {
+        container.innerHTML = "<h2>No Job ID provided</h2>";
+        return;
+    }
+
     const res = await fetch(API_URL);
     const jobs = await res.json();
 
-    const job = jobs.find(j => String(j.JobID) === String(jobId));
+    console.log("Jobs:", jobs);
+    console.log("URL Job ID:", jobId);
+
+    // 🔥 Bulletproof matching (handles JOB-101 vs 101)
+    const job = jobs.find(j => {
+        const apiId = String(j.jobId).replace("JOB-","").trim();
+        const urlId = String(jobId).replace("JOB-","").trim();
+        return apiId === urlId;
+    });
 
     if (!job) {
-        container.innerHTML = "<h2>Job not found.</h2>";
+        container.innerHTML = "<h2>Job not found</h2>";
         return;
     }
 
     let html = `
-        <h1>${job["Job Title"]}</h1>
+        <h1>${job.title}</h1>
+
         <h3>
-            Location: ${job["Location"]} |
-            Experience: ${job["Experience"]} Years |
-            Department: ${job["Department"]}
+            ${job.department} | ${job.location}
         </h3>
+
+        <p><b>Job ID:</b> ${job.jobId}</p>
+        <p><b>Experience:</b> ${job.experience} years</p>
+        <p><b>Salary:</b> ${job.salary}</p>
+        <p><b>Positions:</b> ${job.positions}</p>
+
         <br>
-    `;
 
-    
-    if (job["Job Description"]) {
-        html += `
-            <h2>Job Description</h2>
-            <p>${job["Job Description"]}</p>
-        `;
-    }
+        <h2>Job Description</h2>
+        <p>${job.description}</p>
 
-    if (job["Responsibilities"]) {
-        html += `
-            <h2>Responsibilities</h2>
-            <p>${job["Responsibilities"]}</p>
-        `;
-    }
+        <h2>Responsibilities</h2>
+        <p>${job.responsibilities}</p>
 
-    if (job["Required Skills"]) {
-        html += `
-            <h2>Required Skills</h2>
-            <p>${job["Required Skills"]}</p>
-        `;
-    }
+        <h2>Required Skills</h2>
+        <p>${job.skills}</p>
 
-    
-    for (const key in job) {
-        if ([
-            "JobID","Timestamp","Status",
-            "Job Title","Department","Experience","Age","Location",
-            "Job Description","Responsibilities","Required Skills"
-        ].includes(key)) continue;
-
-        html += `<p><b>${key}:</b> ${job[key]}</p>`;
-    }
-
-    html += `
         <br><br>
-        <a href="https://forms.gle/JPpJPWtQw17ExZHK7" target="_blank">
-            <button style="padding:15px 30px; font-size:16px;">
-                Apply Now
-            </button>
-        </a>
+
+        <button onclick="applyNow('${job.jobId}')"
+            style="padding:15px 30px; font-size:16px;">
+            Apply Now
+        </button>
     `;
 
     container.innerHTML = html;
 
 } catch (err) {
     console.error(err);
-    container.innerHTML = "<p>Failed to load job details.</p>";
+    container.innerHTML = "<p>Error loading job details</p>";
 }
+
+
+// 🔥 APPLY BUTTON FUNCTION (AUTO FILLS JOB ID)
+window.applyNow = function(jobId){
+
+    // 🔴 Replace with your actual prefilled form link
+    const formBase = "https://docs.google.com/forms/d/e/YOUR_FORM_ID/viewform";
+
+    // 🔴 Replace with your Job ID field entry ID
+    const jobField = "entry.123456789";
+
+    const finalUrl = formBase + "?" + jobField + "=" + encodeURIComponent(jobId);
+
+    window.open(finalUrl, "_blank");
+};
 
 });
 </script>
+
 </body>
 </html>
