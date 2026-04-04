@@ -8,7 +8,7 @@
 <body>
 
 <header>
-    <h2 class="logo">DBL</h2>
+    <img src="logo.jpg" class="logo" alt="DBL Logo">
     <button>HOME</button>
 </header>
 
@@ -76,11 +76,12 @@
 <script>
 document.addEventListener("DOMContentLoaded", function () {
 
-const API_URL = "https://script.google.com/macros/s/AKfycbxH2s-d294_x81RqRZBtkWAgAUeEgbR4xCOwk6F80c7EkE3oslSO77OVWecTqkobB8/exec";
+const API_URL = "https://script.google.com/macros/s/AKfycbw8mCNzWAsrysaMYROfnaCYnFyxqHV3YY78WUQKJ0m4rC8y-E4qLZ2-HYp6aHaxlnFb/exec";
 
 const container = document.getElementById("jobsContainer");
 const searchInput = document.getElementById("searchInput");
 const categoryFilter = document.getElementById("categoryFilter");
+const locationFilter = document.getElementById("locationFilter"); 
 const openRolesCount = document.getElementById("openRolesCount");
 
 let allJobs = [];
@@ -123,12 +124,12 @@ function renderJobs(jobs) {
         card.className = "job-card";
 
         card.innerHTML = `
-            <h3>${job["Job Title"] || ""}</h3>
-            <p><b>Department:</b> ${job["Department"] || ""}</p>
-            <p><b>Location:</b> ${job["Location"] || ""}</p>
-            <p><b>Experience:</b> ${job["Experience"] || ""} Years</p>
+            <h3>${job.title || ""}</h3>
+            <p><b>Department:</b> ${job.department || ""}</p>
+            <p><b>Location:</b> ${job.location || ""}</p>
+            <p><b>Experience:</b> ${job.experience || ""} Years</p>
 
-            <a href="job-details.html?id=${job["JobID"]}">
+            <a href="job-details.html?jobId=${job.jobId}">
                 <button>More Details</button>
             </a>
         `;
@@ -148,9 +149,9 @@ function filterJobs() {
 
     const filtered = allJobs.filter(job => {
 
-        const title = (job["Job Title"] || "").toLowerCase();
-        const department = job["Department"] || "";
-        const location = job["Location"] || "";
+        const title = (job.title || "").toLowerCase();
+        const department = job.department || "";
+        const location = job.location || "";
 
         const titleMatch = title.includes(searchValue);
         const categoryMatch = !categoryValue || department === categoryValue;
@@ -172,5 +173,6 @@ loadJobs();
 
 });
 </script>
+
 </body>
 </html>
