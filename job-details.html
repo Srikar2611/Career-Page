@@ -21,7 +21,7 @@
 <script>
 document.addEventListener("DOMContentLoaded", async function () {
 
-const API_URL = "https://script.google.com/macros/s/AKfycbzMMbdcYAliS9v0UerCRd6IU5BIfuPwpP8wwZPYvmso5jh-0rz8301u0tgETXaXXdxK/exec"; 
+const API_URL = "https://script.google.com/macros/s/AKfycbw8mCNzWAsrysaMYROfnaCYnFyxqHV3YY78WUQKJ0m4rC8y-E4qLZ2-HYp6aHaxlnFb/exec";
 
 const params = new URLSearchParams(window.location.search);
 const jobId = params.get("jobId");
@@ -41,12 +41,8 @@ try {
     console.log("Jobs:", jobs);
     console.log("URL Job ID:", jobId);
 
-    // 🔥 Bulletproof matching (handles JOB-101 vs 101)
-    const job = jobs.find(j => {
-        const apiId = String(j.jobId).replace("JOB-","").trim();
-        const urlId = String(jobId).replace("JOB-","").trim();
-        return apiId === urlId;
-    });
+    // ✅ FIXED MATCHING
+    const job = jobs.find(j => j.jobId == jobId);
 
     if (!job) {
         container.innerHTML = "<h2>Job not found</h2>";
@@ -91,14 +87,9 @@ try {
     container.innerHTML = "<p>Error loading job details</p>";
 }
 
-
-// 🔥 APPLY BUTTON FUNCTION (AUTO FILLS JOB ID)
 window.applyNow = function(jobId){
 
-    // 🔴 Replace with your actual prefilled form link
     const formBase = "https://docs.google.com/forms/d/e/1FAIpQLSelt34ipMayNe8mlhsySMZeDUGG5pbdHnpXVDDCK7X9A7YleA/viewform";
-
-    // 🔴 Replace with your Job ID field entry ID
     const jobField = "entry.123456789";
 
     const finalUrl = formBase + "?" + jobField + "=" + encodeURIComponent(jobId);
